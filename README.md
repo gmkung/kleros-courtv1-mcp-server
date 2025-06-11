@@ -152,6 +152,14 @@ src/
 - **Error Handling**: Robust error handling with detailed error reporting
 - **Flexible Structure**: Handles varying meta-evidence structures across dispute types
 
+## 🚀 Deployment
+
+**Recommended**: Deploy to Railway for free hosting of your MCP server.
+
+See [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md) for step-by-step deployment instructions.
+
+**Quick start**: Push to GitHub → Connect to Railway → Auto-deploy! 🚂
+
 ## License
 
 MIT 
