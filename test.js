@@ -5,6 +5,7 @@ import { spawn } from 'child_process';
 
 console.log('Testing Kleros Court MCP Server...');
 
+
 const server = spawn('node', ['dist/index.js'], {
   stdio: ['pipe', 'pipe', 'inherit']
 });
@@ -61,38 +62,33 @@ server.stdout.on('data', (data) => {
   const response = data.toString().trim();
   output += response;
   
-  // Try to parse and pretty print JSON responses
-  const lines = response.split('\n').filter(line => line.trim());
-  
-  lines.forEach(line => {
-    try {
-      const parsed = JSON.parse(line);
-      
-      // Check if this is an MCP response with dispute data
-      if (parsed.result && parsed.result.content && parsed.result.content[0] && parsed.result.content[0].text) {
-        try {
-          // Parse the dispute data from the text field
-          const disputeData = JSON.parse(parsed.result.content[0].text);
-          console.log('\n=== 🏛️  KLEROS DISPUTE DATA ===');
-          console.log(JSON.stringify(disputeData, null, 2));
-          console.log('================================\n');
-        } catch (innerError) {
-          // If the text field isn't JSON, show the MCP response
-          console.log('\n=== MCP Response ===');
-          console.log(JSON.stringify(parsed, null, 2));
-          console.log('===================\n');
-        }
-      } else {
-        // Show other MCP responses (like tool list, etc.)
+  try {
+    const parsed = JSON.parse(response);
+    
+    // Check if this is an MCP response with dispute data
+    if (parsed.result && parsed.result.content && parsed.result.content[0] && parsed.result.content[0].text) {
+      try {
+        // Parse the dispute data from the text field
+        const disputeData = JSON.parse(parsed.result.content[0].text);
+        console.log('\n=== 🏛️  KLEROS DISPUTE DATA ===');
+        console.log(JSON.stringify(disputeData, null, 2));
+        console.log('================================\n');
+      } catch (innerError) {
+        // If the text field isn't JSON, show the MCP response
         console.log('\n=== MCP Response ===');
         console.log(JSON.stringify(parsed, null, 2));
         console.log('===================\n');
       }
-    } catch (error) {
-      // If it's not JSON, just log it as is
-      console.log('Raw response:', line);
+    } else {
+      // Show other MCP responses (like tool list, etc.)
+      console.log('\n=== MCP Response ===');
+      console.log(JSON.stringify(parsed, null, 2));
+      console.log('===================\n');
     }
-  });
+  } catch (error) {
+    // If it's not JSON, just log it as is
+    console.log('Raw response:', response);
+  }
 });
 
 server.on('error', (error) => {

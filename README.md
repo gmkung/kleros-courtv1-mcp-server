@@ -47,7 +47,9 @@ Retrieves comprehensive dispute data including meta-evidence and all evidence su
 - `disputeId` (string|number): The dispute ID to retrieve data for
 - `chainId` (number): The chain ID (1 for Ethereum, 100 for Gnosis)
 
-**Example Response:**
+**Example Responses:**
+
+**Success Case (All evidence retrieved successfully):**
 ```json
 {
   "disputeId": "463",
@@ -64,27 +66,47 @@ Retrieves comprehensive dispute data including meta-evidence and all evidence su
     },
     "category": "Curated Lists",
     "question": "Does the market comply with the required criteria?",
-    "fileURI": "/ipfs/QmWw7bJiCEQBcN7ufZZwxSR7wzKvVC3oyPWoE5nj4BfD4W/seer-verified-markets-on-gnosis-policy.pdf"
-  },
-  "metaEvidenceFileUrl": "https://cdn.kleros.link/ipfs/QmWw7bJiCEQBcN7ufZZwxSR7wzKvVC3oyPWoE5nj4BfD4W/seer-verified-markets-on-gnosis-policy.pdf",
-  "evidences": [
-    {
-      "URI": "/ipfs/Qmc4LnPxs5BLPWK6WQr7foArY7df83y49Y8k1LTAGeeCZP",
-      "creationTime": "1749574530",
-      "sender": "0x2ff064d951996c9fe70d6ba22d8684f37b2e24ec"
+    "disputePolicyFileUrl": "https://cdn.kleros.link/ipfs/QmWw7bJiCEQBcN7ufZZwxSR7wzKvVC3oyPWoE5nj4BfD4W/seer-verified-markets-on-gnosis-policy.pdf",
+    "evidenceDisplayInterfaceURI": "https://cdn.kleros.link/ipfs/QmNhJXtMrxeJu4fpchPruGrL93bm2M4VmDZ8pj4x6FqnHJ/index.html",
+    "metadata": {
+      "tcrTitle": "Seer Markets",
+      "tcrDescription": "Registry of verified Seer markets",
+      "logoURI": "https://cdn.kleros.link/ipfs/QmckmpMuWGiGHCzbYgPqLPcCvLDj4YDPRZB63p7VaAjrbB/seer-logo-2-.png",
+      "itemName": "market",
+      "itemNamePlural": "markets"
     }
-  ],
+  },
   "evidenceContents": [
     {
       "title": "Challenge Justification",
-      "description": "Dangerous bug. The Images type shows as \"Forbidden file type\" on the curated frontend...",
-      "fileURI": "/ipfs/QmZY9nCSxeT2NBkbmLVo2UWp4CtN2sDYr14HeeuK6iZ13h",
+      "description": "Dangerous bug. The Images type shows as \"Forbidden file type\" on the curated frontend. Then it shows the images, but at this point, I don't know what to trust. This is extremely dangerous and we must reject the item, the users must be protected.",
+      "fileURI": "https://cdn.kleros.link/ipfs/QmZY9nCSxeT2NBkbmLVo2UWp4CtN2sDYr14HeeuK6iZ13h",
       "fileTypeExtension": "51",
       "type": "image/png"
     }
-  ],
-  "evidenceFileUrls": [
-    "https://cdn.kleros.link/ipfs/QmZY9nCSxeT2NBkbmLVo2UWp4CtN2sDYr14HeeuK6iZ13h"
+  ]
+}
+```
+
+**Error Case (Some evidence failed to retrieve):**
+```json
+{
+  "disputeId": "463",
+  "chainId": 100,
+  "metaEvidence": {
+    "title": "Add a market to Seer Markets",
+    "description": "Someone requested to add a market to Seer Markets",
+    "disputePolicyFileUrl": "https://cdn.kleros.link/ipfs/QmWw7bJiCEQBcN7ufZZwxSR7wzKvVC3oyPWoE5nj4BfD4W/seer-verified-markets-on-gnosis-policy.pdf"
+  },
+  "evidenceErrors": [
+    {
+      "evidenceUri": "/ipfs/QmSomeFailedHash",
+      "error": "Network timeout"
+    },
+    {
+      "evidenceUri": "/ipfs/QmAnotherFailedHash",
+      "error": "Invalid evidence content JSON received from /ipfs/QmAnotherFailedHash"
+    }
   ]
 }
 ```
@@ -111,6 +133,24 @@ The server is built with:
 - Zod for input validation
 - Axios for HTTP requests
 - MCP SDK for protocol implementation
+
+### Project Structure
+
+```
+src/
+├── index.ts        # Main entry point and MCP server setup
+├── api.ts          # Data fetching functions (meta-evidence, evidences)
+├── config.ts       # Configuration constants and chain settings
+├── types.ts        # TypeScript interfaces and type definitions
+└── validation.ts   # Zod schemas for input validation
+```
+
+### Architecture
+
+- **Modular Design**: Clean separation of concerns across files
+- **Type Safety**: Comprehensive TypeScript interfaces for all data structures
+- **Error Handling**: Robust error handling with detailed error reporting
+- **Flexible Structure**: Handles varying meta-evidence structures across dispute types
 
 ## License
 
