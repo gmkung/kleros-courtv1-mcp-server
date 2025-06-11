@@ -107,6 +107,29 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error("Kleros Court MCP Server running on stdio");
+  
+  // Optional: Simple health check endpoint for Railway
+  if (process.env.PORT) {
+    const http = await import('http');
+    const healthServer = http.createServer((req, res) => {
+      if (req.url === '/health') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ 
+          status: 'healthy', 
+          service: 'kleros-court-mcp',
+          timestamp: new Date().toISOString()
+        }));
+      } else {
+        res.writeHead(404);
+        res.end('MCP Server - Use stdio for communication');
+      }
+    });
+    
+    const port = parseInt(process.env.PORT) || 8080;
+    healthServer.listen(port, () => {
+      console.error(`Health check endpoint running on port ${port}`);
+    });
+  }
 }
 
 main().catch((error) => {

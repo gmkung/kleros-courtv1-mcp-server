@@ -160,6 +160,14 @@ See [RAILWAY_DEPLOY.md](./RAILWAY_DEPLOY.md) for step-by-step deployment instruc
 
 **Quick start**: Push to GitHub → Connect to Railway → Auto-deploy! 🚂
 
+## 🤖 AI Assistant Integration
+
+See [MCP_INTEGRATION.md](./MCP_INTEGRATION.md) for detailed instructions on using your deployed MCP server with:
+
+- **✅ Claude Desktop** - Native MCP support (recommended)
+- **❌ ChatGPT** - No MCP support (alternatives provided)
+- **❌ Other AI assistants** - HTTP API approach needed
+
 ## License
 
 MIT 
